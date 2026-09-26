@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "srl-best-practice",
+  "description": "Claude Code plugin with best practices for the Simple Reporting Library (@simple-reporting/base)",
+  "owner": {
+    "name": "multivisio"
+  },
+  "plugins": [
+    {
+      "name": "srl-best-practice",
+      "source": "./plugins/srl-best-practice",
+      "description": "Best practices for projects built on the Simple Reporting Library (@simple-reporting/base): Livingdocs components, srl.config.json tokens, the srl SCSS module, multi-target builds and PDFreactor scripts."
+    }
+  ]
+}
