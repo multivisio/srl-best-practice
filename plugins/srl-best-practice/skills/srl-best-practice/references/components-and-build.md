@@ -56,6 +56,9 @@ livingdocs/
 - The validator fails for properties used but not declared, and warns for
   declared but unused ones (`component properties […] are unused`). Treat the
   warning as a cleanup hint.
+- Changing a property from `option` (checkbox) to `select` with the **same key**,
+  keeping the old value as one of the options, worked in Livingdocs without
+  errors (tested live once, no docs on it). Existing documents keep the class.
 - Property values are CSS classes on the component root; style them in the
   property's own scss folder (for shared properties) or in the component.
 
@@ -104,6 +107,14 @@ web and editor go into `web.scss`. Editor-only helpers (labels, borders, the
 | `srl build -t xbrl` | `.output/xbrl/xbrl.css` | xbrl | rem |
 
 - `srl build` without `-t` builds everything. Targets can be combined: `-t pdf,word`.
+- `srl build` empties `.output` first. `--no-clean` keeps it, e.g. for a quick
+  `srl build --target pdf --no-clean` before a local test render that must not
+  delete the `design.zip` of the last full build.
+- **Raise the Livingdocs version only when `livingdocs.config.json` changes in
+  content.** That comes from component HTML, `ld-conf.json` or `properties.json`.
+  CSS/SCSS and `srl.config.json` token changes need no new version: build again
+  with the current version from package.json. Compare the parsed config with the
+  committed one (ignoring `version`) before deciding.
 - The LDD build maps components and properties into `livingdocs.config.json`,
   sets `name`/`version` from package.json and copies it to `design.json`.
 - `srl prepare` (postinstall) deletes and recreates `.srl/` and copies the
