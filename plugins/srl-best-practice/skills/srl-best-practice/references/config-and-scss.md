@@ -36,6 +36,10 @@ and become `em`. So:
 - Screen values: unitless numbers.
 - Print-only values: strings with `pt`.
 - `0` stays `0`; `false`/`null` become `unset`.
+- Never wrap a value that already has a unit: `srl.system-size-unit(12pt)` just
+  returns `12pt` (only `number` + `math.is-unitless` + `!= 0` is converted, see
+  `size-unit()` in `scss/system/functions.scss`). Write `12pt` directly, or pass
+  a unitless value if it should follow the target unit.
 
 ## Typography
 
@@ -64,6 +68,14 @@ For every entry the library generates:
 The mixin and most getters throw a Sass `@error` for unknown names; the getters
 `get-font-weight`, `get-letter-spacing` and `get-text-transform` do not check the
 name and silently return `var(--…, unset)`. Double-check names used with them.
+
+Typographic changes belong in `srl.config.json`: if a look exists as its own
+typography entry, change the entry there instead of overriding it in the
+component SCSS. `line-height` is a unitless factor like everywhere else in the
+config (12pt on 9pt text: `1.333333`, 13pt: `1.444444`). Overriding a single
+value in a component is fine for real special cases, preferably with a getter
+from another entry (e.g. `line-height: srl.typography-get-line-height('paragraph')`
+to put a list on the grid of the running text).
 
 Use the mixin for full text styles, the getters when only single properties are
 needed (e.g. table cells that take the size from one typo and the weight from

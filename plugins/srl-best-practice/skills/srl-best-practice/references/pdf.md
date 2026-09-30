@@ -41,6 +41,15 @@
 - Elements with `display: none` do not take part in the layout; replacing them
   does not shift anything.
 
+## CSS support in PDFreactor
+
+- `:has()` is **not** supported. Set a class on the element instead (in the
+  template or from the PDF script) and select on that.
+- `leader('.')` works in `content` (e.g. dotted ToC leaders up to the page
+  number); `target-counter(attr(…), page)` for page references.
+- In scripts, `node.replaceWith(a, b)` with several nodes does not work;
+  replace with one node and insert the next with `after()`.
+
 ## Page layout
 
 - `@page :left` / `@page :right` with margin boxes (`@top-left-corner`, …);

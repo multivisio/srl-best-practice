@@ -37,7 +37,8 @@ it is small and readable. The details are in the reference files:
    `ld-conf.json`, `properties.json`, `srl.config.json`, `src/assets/scss/**`.
 2. **Design tokens live in `srl.config.json`**, not as literal values in SCSS.
    Use `srl.typography-<name>()`, `srl.colors-<name>()`, `srl.spacer-get(<n>)`,
-   `srl.system-size-unit(<n>)`, `map.get(srl.$meta, …)`.
+   `srl.system-size-unit(<n>)` (unitless numbers only), `map.get(srl.$meta, …)`.
+   Change an existing typography entry in the config instead of overriding it in SCSS.
 3. **Folder number prefixes only define order.** `NNN.` is stripped for group labels
    and component names. The folder name without prefix must equal `name` in
    `ld-conf.json`, otherwise the component is not listed in its group and the
@@ -53,7 +54,9 @@ it is small and readable. The details are in the reference files:
    and Sass `@error` text before reporting success.
 7. **Pass the version for LDD builds.** `srl build --target ldd` asks for the
    Livingdocs version interactively and writes it to package.json. In scripts or
-   non-interactive shells run `npx srl build <version> --target ldd`.
+   non-interactive shells run `npx srl build <version> --target ldd`. Raise the
+   version only when `livingdocs.config.json` changes in content (HTML,
+   `ld-conf.json`, `properties.json`); for CSS and token changes keep the current one.
 8. **An LDD build may only reorder `livingdocs.config.json`.** Compare it
    semantically (parsed JSON) with the committed version and revert pure reorders
    instead of committing noise.
