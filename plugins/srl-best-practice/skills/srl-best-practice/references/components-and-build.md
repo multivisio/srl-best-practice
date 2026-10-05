@@ -9,8 +9,8 @@ livingdocs/
       component-name.html   # Livingdocs template (exactly one *.html)
       ld-conf.json          # name, label, properties, directives, allowedParents …
       properties.json       # optional, component properties (global namespace!)
-      app.ts                # optional, runtime class for data-autoload
-      *.vue                 # optional, registered as async component SrlLd<Name>
+      <name>.vue            # optional, global async component SrlLd<Name> / <srl-ld-name>
+      <name>/*.vue          # optional, sub components imported by <name>.vue (not registered)
       scss/{general,app,editor,web,pdf,word,xbrl}.scss
   999.Properties/<property>/properties.json + scss/   # shared properties
 ```
@@ -42,9 +42,18 @@ livingdocs/
   `complete` removes the element with its content, `transient` removes only the
   element and keeps its children. PDF-only components therefore carry
   `data-remove-from-web|word|xhtml="complete"`.
-- Runtime behaviour in the web app: `data-autoload="<ClassName>"` (or a JSON
-  array) plus `data-options='{…}'`; the class comes from the component's `app.ts`
-  and is registered automatically under the camelCased folder name.
+- Runtime behaviour in the web app: put a **Vue component in the component
+  root** (e.g. `040.Media/010.table/table.vue`). Every `*.vue` directly in the
+  component folder is registered automatically as a **global** async component
+  `SrlLd<Name>` (`.srl/plugins/asyncLdComponent.ts`); use it in the template as
+  `<srl-ld-<name>>` around the editable markup, which the component renders via
+  `<slot />`. `.vue` files in sub folders are not registered; import them.
+- **Every `<srl-ld-…>` custom element must carry `data-replace-tag` (e.g.
+  `data-replace-tag="div"`) unless it is removed from the XHTML with
+  `data-remove-from-xhtml`.** Otherwise the custom element stays in the XHTML
+  output and makes it inconsistent.
+- `app.ts` + `data-autoload` / `src/Autoload.ts` is an outdated technique: do not
+  use it for new components and do not document it.
 - Classes the editor may toggle belong in properties, not in the template.
 
 ## Properties
