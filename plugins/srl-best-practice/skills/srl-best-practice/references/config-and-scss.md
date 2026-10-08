@@ -118,6 +118,12 @@ and for PDF `srl.grid-pdf-flex-col($span)`,
 `columns.print`). CSS variables: `--srl-gutter-column-gap`,
 `--srl-container-max-width`, `--srl-container-padding`, `--srl-breakpoint-…`.
 
+**`srl.grid-col($span, $bp)` and `srl.grid-offset($offset, $bp)` apply only
+within the range of `$bp`**, not from `$bp` upwards: they use `grid-media`, which
+ends one pixel before the next breakpoint. For "from this breakpoint on" wrap the
+call: `@include srl.grid-media-up(desktop) { @include srl.grid-col(8); }`.
+`grid-col($span, $start, $end)` uses `media-between`.
+
 ## Meta
 
 Free-form project settings (`meta.meta`). Read them with
@@ -138,5 +144,8 @@ by hand in code that also compiles for word; use the functions.
   `editor.scss`/`ldd.scss`, `pdf.scss`, `word.scss`, `xbrl.scss` into their target.
 - Every file in `src/assets/scss/placeholders/**` is `@use`d by `srl/index.scss`,
   so its `%placeholders` can be `@extend`ed anywhere after `@use 'srl'`
-  (e.g. `%srl-regular-width`, `%srl-grid-base`).
+  (e.g. `%srl-regular-width`, `%srl-grid-base`). The files are loaded with
+  `@use … as <alias>`, not forwarded: **mixins, functions and variables defined
+  in a placeholder file are not available as `srl.…`**. `@use` that file
+  directly where you need them.
 - Fonts: `src/assets/fonts/**/*.scss` are included automatically.
