@@ -18,7 +18,7 @@ description: >
 
 # Simple Reporting Library (srl): best practices
 
-Based on an analysis of `@simple-reporting/base` 1.0.53. When in doubt, read the
+Based on an analysis of `@simple-reporting/base` 1.0.53, re-checked against 1.0.55. When in doubt, read the
 package source in `node_modules/@simple-reporting/base` (scripts/, scss/, srl/),
 it is small and readable. The details are in the reference files:
 
@@ -51,7 +51,10 @@ it is small and readable. The details are in the reference files:
    `xbrl`) when one `general.scss` needs target-specific rules.
 6. **Treat build output as the source of truth.** `srl build` catches errors and
    still exits with code 0. Always scan the output for `Error`, validator messages
-   and Sass `@error` text before reporting success.
+   and Sass `@error` text before reporting success. A failing design validator
+   aborts the rest of the build silently: customer builds, the XBRL `@media`
+   stripping, `design.zip` and `app.zip` are skipped. Check that the expected
+   files in `.output/` exist and are new.
 7. **Pass the version for LDD builds.** `srl build --target ldd` asks for the
    Livingdocs version interactively and writes it to package.json. In scripts or
    non-interactive shells run `npx srl build <version> --target ldd`. Raise the
@@ -64,6 +67,17 @@ it is small and readable. The details are in the reference files:
    plain files at that level.
 10. **Remove unused things only after checking every access path** (see
     "Checking whether a token or component is unused" below).
+11. **Dev mode does not see every change.** The Vite plugin does not watch
+    `ld-conf.json`, component `*.html` files or new component folders; SCSS is
+    only remapped when a target file (`general|app|editor|ldd|pdf|word|xbrl.scss`)
+    is added or removed. Restart `npm run dev` or run `npx srl map` after such
+    changes.
+12. **Run `npx srl map` after `srl remove components|groups`.** The command
+    starts the mapping before the folders are deleted, so the design can still
+    contain the removed components.
+13. **Check for updates yourself.** The update notice of the dev server compares
+    versions incorrectly and never shows minor or major updates. Use
+    `npm outdated @simple-reporting/base`.
 
 ## Checking whether a token or component is unused
 
