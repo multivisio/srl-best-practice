@@ -124,6 +124,10 @@ ends one pixel before the next breakpoint. For "from this breakpoint on" wrap th
 call: `@include srl.grid-media-up(desktop) { @include srl.grid-col(8); }`.
 `grid-col($span, $start, $end)` uses `media-between`.
 
+`srl.grid-get-breakpoint($bp)` returns `var(--srl--breakpoint-…)` (double hyphen,
+the prefix already ends with `-`), a variable that does not exist. Use
+`var(--srl-breakpoint-<bp>)` or `map.get` on the breakpoints instead.
+
 ## Meta
 
 Free-form project settings (`meta.meta`). Read them with
