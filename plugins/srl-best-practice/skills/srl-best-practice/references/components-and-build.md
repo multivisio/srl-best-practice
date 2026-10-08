@@ -15,6 +15,8 @@ livingdocs/
   999.Properties/<property>/properties.json + scss/   # shared properties
 ```
 
+- Every group folder becomes a group, even without components (`999.Properties`
+  shows up as an empty group "Properties").
 - Group label = folder name without the number prefix; the first `_and_` becomes
   ` / `, the first `_` becomes a space. Labels must be unique.
 - Component name = folder name without prefix = `ld-conf.json` `name`. A folder
@@ -168,9 +170,14 @@ web and editor go into `web.scss`. Editor-only helpers (labels, borders, the
   `@media` stripping and both zips. A run that "finishes" without a fresh
   `.output/design.zip` failed.
 - `-c <customer>|all` only runs together with the `pdf` target. It copies the
-  whole `.output/pdf`, `.output/word` and `.output/xbrl` into `.output/ldd/`, so
-  they end up in `design.zip`. The XBRL copy is taken **before** the `@media`
-  blocks are stripped; the `xbrl.css` inside `design.zip` still contains them.
+  whole `.output/pdf`, `.output/word` and `.output/xbrl` into `.output/ldd/`;
+  when `ldd` is built in the same run they end up in `design.zip`. The XBRL copy
+  is taken **before** the `@media` blocks are stripped, so that `xbrl.css` still
+  contains them.
+- `-c all` treats every entry of `pdf/customers/` as a customer, also plain
+  files like `.gitkeep`; keep only customer folders there. `custom.ts` is the PDF
+  entry of a customer, `custom.scss` is only built for XBRL (together with the
+  base `xbrl.scss`).
 - Font SCSS in `src/assets/fonts/**` is compiled into app and xbrl. ldd, pdf and
   word instead `@import "<INTERNAL_LDD_URL>/<package name>/<version>/fonts/style.css"`,
   so their fonts load from the deployed design version. `INTERNAL_LDD_URL`
