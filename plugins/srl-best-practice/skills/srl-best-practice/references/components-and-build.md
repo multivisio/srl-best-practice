@@ -18,7 +18,9 @@ livingdocs/
 - Every group folder becomes a group, even without components (`999.Properties`
   shows up as an empty group "Properties").
 - Group label = folder name without the number prefix; the first `_and_` becomes
-  ` / `, the first `_` becomes a space. Labels must be unique.
+  ` / `, every other `_` becomes a space (`150.Very_Long_Name` → "Very Long
+  Name"). Up to srl 1.0.55 only the first `_` is replaced, so use at most one `_`
+  there. Labels must be unique.
 - Component name = folder name without prefix = `ld-conf.json` `name`. A folder
   only counts as a component if it has an `*.html` and an `ld-conf.json`.
 - Order in the editor and in the aggregated SCSS follows the folder names
