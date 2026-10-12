@@ -55,6 +55,24 @@ livingdocs/
   `complete` removes the element with its content, `transient` removes only the
   element and keeps its children. PDF-only components therefore carry
   `data-remove-from-web|word|xhtml="complete"`.
+- **Multi-channel pattern** (reference: `100.Misc/020.accordion`): one editor
+  structure, different markup per channel.
+  - Wrapper divs that only give the editor its look: `transient` for all four
+    targets. Use the same BEM classes as the Vue output, so one stylesheet
+    serves editor and app.
+  - Web keeps only the `<srl-ld-…>` root and the `<template-<name>
+    doc-container="…">` wrappers that the Vue component consumes as slots.
+  - Decorative empty elements (icons): `complete` everywhere; the Vue
+    component renders its own.
+  - PDF/Word/XHTML: root and slot wrappers `transient`, so only the plain
+    content remains (accordion → heading + content, always expanded). A root
+    removed from XHTML needs no `data-replace-tag`.
+  - Never `complete` on an element containing `doc-container`/`doc-editable`.
+  - Property classes sit on the root; if the root is removed transiently in
+    PDF, check whether e.g. `pdf-spacer` still reaches the PDF.
+  - `accordion.vue` rebuilds the heading (keeps only number/text spans, so
+    `h2-as` classes are lost in the app) and falls back to plain slots when the
+    header does not start with `h1`–`h6`.
 - Runtime behaviour in the web app: put a **Vue component in the component
   root** (e.g. `040.Media/010.table/table.vue`). Every `*.vue` directly in the
   component folder is registered automatically as a **global** async component
