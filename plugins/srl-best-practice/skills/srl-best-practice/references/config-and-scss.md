@@ -141,6 +141,10 @@ key (`number-width` / `number-width-pdf`).
 except word, where the value is resolved at compile time (print value first) and
 pt values are rounded. Word has no custom properties, so never write `var(--srl-…)`
 by hand in code that also compiles for word; use the functions.
+Local overrides of a text style via its CSS variable (`--srl-typo-<name>-…: …`)
+and the `srl.typography-set-<property>(<name>, <value>)` mixins, which only write
+that same variable, have no effect in word. For word, set the property itself
+in `word.scss` (e.g. `font-size: 10pt;`).
 
 ## Global styles and placeholders
 
