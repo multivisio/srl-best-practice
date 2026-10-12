@@ -9,7 +9,7 @@
     {
       "name": "srl-best-practice",
       "source": "./plugins/srl-best-practice",
-      "description": "Best practices for projects built on the Simple Reporting Library (@simple-reporting/base): Livingdocs components, srl.config.json tokens, the srl SCSS module, multi-target builds and PDFreactor scripts."
+      "description": "Best practices for projects built on the Simple Reporting Library (@simple-reporting/base): Livingdocs components, srl.config.json tokens, the srl SCSS module, multi-target builds and PDFreactor scripts, plus the workflow for migrating projects to SRL 2 (@simple-reporting/core, Nuxt)."
     }
   ]
 }

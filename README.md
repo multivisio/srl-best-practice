@@ -13,6 +13,9 @@ The skill loads automatically in srl projects and covers:
 - PDFreactor script timing, performance and page layout
 - how to check safely whether a token or component is unused before removing it
 
+A second skill, `srl-migrate-srl2`, describes how to migrate an SRL 1 project to SRL 2
+(`@simple-reporting/core`, Nuxt) and lists the known pitfalls.
+
 Written against `@simple-reporting/base` 1.0.53.
 
 ## Installation
@@ -33,4 +36,7 @@ plugins/srl-best-practice/
     references/config-and-scss.md     srl.config.json and the srl SCSS module
     references/components-and-build.md components, properties, builds
     references/pdf.md                 PDF target and PDFreactor
+  skills/srl-migrate-srl2/
+    SKILL.md                          migration workflow and pitfalls
+    references/mapping.md             SRL 1 → SRL 2 files, aliases, imports
 ```

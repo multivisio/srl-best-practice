@@ -18,6 +18,9 @@ description: >
 
 # Simple Reporting Library (srl): best practices
 
+This skill covers SRL 1 (`@simple-reporting/base`). To move a project to SRL 2
+(`@simple-reporting/core`, Nuxt), use the `srl-migrate-srl2` skill.
+
 Based on an analysis of `@simple-reporting/base` 1.0.53, re-checked against 1.0.55. When in doubt, read the
 package source in `node_modules/@simple-reporting/base` (scripts/, scss/, srl/),
 it is small and readable. The details are in the reference files:
