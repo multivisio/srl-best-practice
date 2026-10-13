@@ -35,6 +35,14 @@ and become `em`. So:
 
 - Screen values: unitless numbers.
 - Print-only values: strings with `pt`.
+- Screen and print apart: a unitless number as the base value (px on screen,
+  rem in the css) plus the pt value in `media.print`, e.g.
+  `"font-size": 9, "media": { "print": { "font-size": "9pt" } }` or
+  `"325": { "size": 13, "media": { "print": { "size": "13pt" } } }`. PDFreactor
+  uses the print value through `@media print`, word reads the print value at
+  compile time. Note: `9` is 9px, smaller than `9pt` (= 12px). If a project
+  derives class names or editor captions from spacer sizes, read the print size
+  first, so the names (`…-13pt`) stay the same.
 - `0` stays `0`; `false`/`null` become `unset`.
 - Never wrap a value that already has a unit: `srl.system-size-unit(12pt)` just
   returns `12pt` (only `number` + `math.is-unitless` + `!= 0` is converted, see
