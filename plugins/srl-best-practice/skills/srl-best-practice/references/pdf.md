@@ -49,6 +49,18 @@
   number); `target-counter(attr(…), page)` for page references.
 - In scripts, `node.replaceWith(a, b)` with several nodes does not work;
   replace with one node and insert the next with `after()`.
+- Synthetic bold: a font with only a regular face gets a faux bold from
+  `font-weight: 600` on, never at 500. PDFreactor decides by the weight stored in
+  the font file, not by the `@font-face` descriptor: registering a Medium file
+  for `font-weight: 700` still adds a faux bold on top. So a family with a real
+  Medium face (bold = 500) and one with only a regular face (bold >= 600) need
+  different bold weights, e.g. a CSS variable `--…-font-weight-bold` that the
+  components in the regular-only font switch to 700 (word gets a plain value,
+  it knows no variables). Light can never be synthesized.
+- Hyphenation limits: `hyphenate-limit-chars: auto auto 3` (word length,
+  letters before, letters after the hyphen) works in PDFreactor and Chromium;
+  the prefixed `-ro-hyphenate-limit-chars` does not. Without it PDFreactor
+  leaves only 2 letters on the next line.
 
 ## Page layout
 
