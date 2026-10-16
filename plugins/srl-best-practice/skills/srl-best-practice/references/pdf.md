@@ -83,6 +83,32 @@
 - Split tall grid elements only between lines (text) or rows (tables), clone the
   wrapper path, table `colgroup`/`thead`, and mark continuations with a class.
 
+## Document ns.wow sends to PDFreactor
+
+- No doctype, `pdf.css` inline as the first `<style>` (with `@import` of the design's
+  `fonts/style.css`), `pdf.js` inline as `<script>` in the head, `<body class="pdf">`.
+- First child: `p.srl-pdf-publication-title > span.srl-pdf-publication-title__text`
+  (`publicationName` from `settings.json`).
+- Then one `div.srl-chapter.ns-chapter.srl-<chapter name>` (`id='srl-chapter-id-<ld id>'`)
+  per chapter. Chapter names are not translated (`srl-business-report` in every language).
+- Inside, one `div.srl-article.ns-article.srl-<page name>` per article
+  (`id='srl-article-id-<ld id>'`, `lang`); the class is the page name lower-cased, spaces to
+  `_`, other punctuation dropped (`05_06_14 Property, Plant and Equipment` →
+  `srl-05_06_14_property_plant_and_equipment`). Articles of a category also get
+  `srl-category-<category page>` (e.g. `srl-category-notes_group`, used by `PDFNotes`).
+- ns.wow inserts the main menu as `div.srl-chapter-navigation` (`lc-` classes,
+  `--current` item) at the start of the first article of every menu chapter; `pdf.css` turns it
+  into the running header.
+- Links to other articles become `#srl-article-id-<id>` or `#<anchor>`, `data-article-name`,
+  `data-note-target` and `loading="lazy"` are dropped, images are absolute imageservice URLs.
+- The web export in `public/` (`json/routing_<lang>.json`, `json/settings.json`,
+  `html/<lang>/*.html`, `images/`) is the **web** version: `data-remove-from-web` is already
+  applied, `data-remove-from-pdf` is still in it. PDF-only articles (covers, TOC, chapter covers,
+  imprint, backcover) and PDF-only components (`srl-pdf-pagebreak`,
+  `srl-pdf-landscape-container`) are not in it. Chapter order follows `menu.menuMain`, a menu
+  entry on a category page (`notes_group`) stands for all its member pages sorted by name.
+  `pdf-reactor pdf` (export mode) rebuilds this document from `public/`.
+
 ## Testing PDFs
 
 - Render locally with a PDFreactor Docker container and the debug configuration
