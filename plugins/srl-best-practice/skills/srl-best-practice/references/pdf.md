@@ -101,6 +101,15 @@
   into the running header.
 - ns.wow applies `data-remove-from-pdf` and `data-replace-tag` to the article HTML; the
   other `data-remove-from-*` attributes stay in the document.
+- Chapters without a main menu entry exist in the PDF too (e.g. `cover-homepage-toc`,
+  `imprint-backcover`); the chapter navigation is only inserted in chapters of the main menu.
+- Article links in the export: `href="./<lang>/<slug>" data-li-document-ref="<ld id>"
+  data-article-name="<uuid>"` (`data-li-document-ref` only on some links). In the PDF the
+  same link is `href="#srl-article-id-<ld id>"`, `data-li-document-ref` stays.
+- The app does not apply `data-remove-from-web` itself (`.srl/utils/html.ts` does not read
+  it): ns.wow removes it before export. To run the app on raw HTML, hide
+  `[data-remove-from-web='complete']` and set `'transient'` to `display: contents` in
+  `app.scss` (not `web.scss`, the editor shares it).
 - Links to other articles become `#srl-article-id-<id>` or `#<anchor>`, `data-article-name`,
   `data-note-target` and `loading="lazy"` are dropped, images are absolute imageservice URLs.
 - The web export in `public/` (`json/routing_<lang>.json`, `json/settings.json`,
