@@ -54,7 +54,10 @@ livingdocs/
   targets `web`, `pdf`, `word`, `xhtml`, `translate-plus`:
   `complete` removes the element with its content, `transient` removes only the
   element and keeps its children. PDF-only components therefore carry
-  `data-remove-from-web|word|xhtml="complete"`.
+  `data-remove-from-web|word|xhtml="complete"`. Each output applies only its own
+  attribute; the others stay in its HTML (the PDF document still has
+  `data-remove-from-web|word|xhtml`). `data-replace-tag` is applied for the PDF too,
+  not for the web export (`public/html` still has it, the app renders the `<srl-ld-…>`).
 - **Multi-channel pattern** (reference: `100.Misc/020.accordion`): one editor
   structure, different markup per channel.
   - Wrapper divs that only give the editor its look: `transient` for all four

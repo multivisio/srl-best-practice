@@ -99,6 +99,8 @@
 - ns.wow inserts the main menu as `div.srl-chapter-navigation` (`lc-` classes,
   `--current` item) at the start of the first article of every menu chapter; `pdf.css` turns it
   into the running header.
+- ns.wow applies `data-remove-from-pdf` and `data-replace-tag` to the article HTML; the
+  other `data-remove-from-*` attributes stay in the document.
 - Links to other articles become `#srl-article-id-<id>` or `#<anchor>`, `data-article-name`,
   `data-note-target` and `loading="lazy"` are dropped, images are absolute imageservice URLs.
 - The web export in `public/` (`json/routing_<lang>.json`, `json/settings.json`,
