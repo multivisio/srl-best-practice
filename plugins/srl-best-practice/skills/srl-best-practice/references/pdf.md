@@ -107,7 +107,8 @@
   data-article-name="<uuid>"` (`data-li-document-ref` only on some links). In the PDF the
   same link is `href="#srl-article-id-<ld id>"`, `data-li-document-ref` stays.
 - The app does not apply `data-remove-from-web` itself (`.srl/utils/html.ts` does not read
-  it): ns.wow removes it before export. To run the app on raw HTML, hide
+  it): ns.wow removes it before export. The proper place for it is the srl's HTML rewrite,
+  not the project. As a local, uncommitted stopgap for raw HTML: hide
   `[data-remove-from-web='complete']` and set `'transient'` to `display: contents` in
   `app.scss` (not `web.scss`, the editor shares it).
 - Links to other articles become `#srl-article-id-<id>` or `#<anchor>`, `data-article-name`,
