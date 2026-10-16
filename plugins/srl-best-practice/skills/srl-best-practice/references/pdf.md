@@ -108,6 +108,16 @@
   `srl-pdf-landscape-container`) are not in it. Chapter order follows `menu.menuMain`, a menu
   entry on a category page (`notes_group`) stands for all its member pages sorted by name.
   `pdf-reactor pdf` (export mode) rebuilds this document from `public/`.
+- ns.wow adds two attributes the srl does not set or read (nothing in `pdf.js`/`pdf.css`
+  uses them, they stay in the PDF):
+  - `data-li-document-ref="<ld id>"`: on `span.srl-key-figure` (key figures embedded from
+    their own Livingdocs documents) and, in the PDF, on every `a.srl-pdf-toc__item` with the
+    id of the target article (`href="#srl-article-id-<same id>"`). Article ids are Livingdocs
+    document ids, but the web export only has them on key figures, not on articles.
+  - `data-linked-category="<category page name>"`: on the `th`/`td` of the notes column
+    (class `notes`) in financial tables; the cells link to the notes with
+    `a.note-link[data-note-target="popup"]`. Names the category page (`notes_group`), not
+    its id.
 
 ## Testing PDFs
 
