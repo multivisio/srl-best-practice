@@ -96,13 +96,17 @@
   `_`, other punctuation dropped (`05_06_14 Property, Plant and Equipment` →
   `srl-05_06_14_property_plant_and_equipment`). Articles of a category also get
   `srl-category-<category page>` (e.g. `srl-category-notes_group`, used by `PDFNotes`).
-- ns.wow inserts the main menu as `div.srl-chapter-navigation` (`lc-` classes,
-  `--current` item) at the start of the first article of every menu chapter; `pdf.css` turns it
-  into the running header.
+- ns.wow inserts a `div.srl-chapter-navigation` (`lc-` classes, `--current` item) at the
+  start of the first article of every chapter that has a chapter cover
+  (`srl-pdf-chapter-cover`); the items are those chapters with the cover titles. `pdf.css`
+  turns it into the running header.
+- The app menu (`menu.menuMain` in `routing_<lang>.json`) has nothing to do with the PDF.
+  The PDF order matches the page names sorted numerically (`01_02 …` before `01_10 …`), and
+  the chapters match the leading number (`00`, `01`, …, `99`).
 - ns.wow applies `data-remove-from-pdf` and `data-replace-tag` to the article HTML; the
   other `data-remove-from-*` attributes stay in the document.
-- Chapters without a main menu entry exist in the PDF too (e.g. `cover-homepage-toc`,
-  `imprint-backcover`); the chapter navigation is only inserted in chapters of the main menu.
+- Chapters without a chapter cover (e.g. `cover-homepage-toc`, `imprint-backcover`, `hosting`)
+  get no chapter navigation. Their names are not in the export.
 - Article links in the export: `href="./<lang>/<slug>" data-li-document-ref="<ld id>"
   data-article-name="<uuid>"` (`data-li-document-ref` only on some links). In the PDF the
   same link is `href="#srl-article-id-<ld id>"`, `data-li-document-ref` stays.
@@ -117,9 +121,9 @@
   `html/<lang>/*.html`, `images/`) is the **web** version: `data-remove-from-web` is already
   applied, `data-remove-from-pdf` is still in it. PDF-only articles (covers, TOC, chapter covers,
   imprint, backcover) and PDF-only components (`srl-pdf-pagebreak`,
-  `srl-pdf-landscape-container`) are not in it. Chapter order follows `menu.menuMain`, a menu
-  entry on a category page (`notes_group`) stands for all its member pages sorted by name.
-  `pdf-reactor pdf` (export mode) rebuilds this document from `public/`.
+  `srl-pdf-landscape-container`) are not in it. Category overview pages (`notes_group`) and
+  pages with `excludeFromPdf` are not in the PDF. `pdf-reactor pdf` (export mode) rebuilds this
+  document from `public/`.
 - ns.wow adds two attributes the srl does not set or read (nothing in `pdf.js`/`pdf.css`
   uses them, they stay in the PDF):
   - `data-li-document-ref="<ld id>"`: on `span.srl-key-figure` (key figures embedded from
