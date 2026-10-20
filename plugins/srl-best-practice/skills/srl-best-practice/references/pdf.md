@@ -6,6 +6,11 @@
   `#imports/pdf.scss` (all pdf styles) and runs the PDF scripts. The result is
   `.output/pdf/pdf.css` + `pdf.js`, referenced by the PDFreactor configuration
   (`userStyleSheets`, `userScripts` with `beforeDocumentScripts`).
+- Loading `pdf.js` / `pdf.css` through the `pdf-configuration.xml`
+  (`userScripts`, `userStyleSheets`) instead of the design makes the PDF scripts
+  run in the nswow PDF preview next to the editor as well, not only in the final
+  PDF. Layout scripts (page sides, splitting) then also apply in the preview, so
+  no separate no-JavaScript fallback styles are needed for it.
 - Library helpers in `srl/pdf/`:
   - `PDFNestedContainers({ selector: '.srl-nested-container' })` adds
     `<class>-first` / `<class>-last` to containers based on their first/last child,
