@@ -16,6 +16,10 @@ The skill loads automatically in srl projects and covers:
 A second skill, `srl-migrate-srl2`, describes how to migrate an SRL 1 project to SRL 2
 (`@simple-reporting/core`, Nuxt) and lists the known pitfalls.
 
+A third skill, `srl-customers`, covers customer overlays on a shared base design
+(`pdf/customers/nspXXX-<name>/`): overriding base styles, fonts, customer PDF scripts,
+packaging and deploying overlays and the base design to NSWOW.
+
 Written against `@simple-reporting/base` 1.0.53.
 
 ## Installation
@@ -39,4 +43,6 @@ plugins/srl-best-practice/
   skills/srl-migrate-srl2/
     SKILL.md                          migration workflow and pitfalls
     references/mapping.md             SRL 1 → SRL 2 files, aliases, imports
+  skills/srl-customers/
+    SKILL.md                          customer overlays and NSWOW deployment
 ```
