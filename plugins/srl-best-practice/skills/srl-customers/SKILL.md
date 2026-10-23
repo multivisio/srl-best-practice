@@ -76,6 +76,10 @@ Pages: Anleitung, Design Tokens, Komponenten (bound Figma components with explan
   title borders combined as `<width>pt solid <color>`).
 - Values are the print (PDF) values in pt; line-height is stored absolute in pt (valid in CSS too).
 - When the base gets new or renamed variables, update the template file as well.
+- Export: the Figma plugin "SRL Export" (repo `multivisio/figma-srl-export`, loaded as development
+  plugin via manifest.json in the Figma desktop app) writes the `:root` block with all "Kunde" values
+  that differ from "Basis" (pt units, aliases as `var(--srl-…)`, title borders as shorthand). Paste it
+  into the overlay, e.g. `scss/variables.scss` imported by `custom.scss`; add font fallbacks by hand.
 
 ## Rendering a customer PDF locally
 
