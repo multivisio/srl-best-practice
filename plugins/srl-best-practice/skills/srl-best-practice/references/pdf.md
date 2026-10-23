@@ -127,7 +127,7 @@
   applied, `data-remove-from-pdf` is still in it. PDF-only articles (covers, TOC, chapter covers,
   imprint, backcover) and PDF-only components (`srl-pdf-pagebreak`,
   `srl-pdf-landscape-container`) are not in it. Category overview pages (`notes_group`) and
-  pages with `excludeFromPdf` are not in the PDF. `pdf-reactor pdf` (export mode) rebuilds this
+  pages with `excludeFromPdf` are not in the PDF. A local renderer can rebuild this
   document from `public/`.
 - ns.wow adds two attributes the srl does not set or read (nothing in `pdf.js`/`pdf.css`
   uses them, they stay in the PDF):
