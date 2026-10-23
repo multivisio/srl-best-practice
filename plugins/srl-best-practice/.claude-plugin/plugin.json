@@ -1,6 +1,6 @@
 {
   "name": "srl-best-practice",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Best practices for projects built on the Simple Reporting Library (@simple-reporting/base): Livingdocs components, srl.config.json tokens, the srl SCSS module, multi-target builds and PDFreactor scripts, customer overlays on a shared base design and their deployment, plus the workflow for migrating projects to SRL 2 (@simple-reporting/core, Nuxt).",
   "author": {
     "name": "Mike Dörer"

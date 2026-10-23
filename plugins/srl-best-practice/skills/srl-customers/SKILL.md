@@ -46,6 +46,14 @@ pdf/customers/nspXXX-<name>/
    `srl.system-root-style(...)` variable to the base component (with the current value as
    default) over duplicating the selector in the customer overlay. Note: that is a base
    change, so the design.zip must be uploaded too (see Deployment).
+   Name new customer variables with a `pdf` label right after `srl-`
+   (`srl-pdf-<component>-<property>`, e.g. `srl-pdf-paragraph-hyphens`,
+   `srl-pdf-page-margin-top`, `srl-pdf-table-head-font-color`), because a web output may
+   follow and should be able to behave differently. Components that are PDF-only already
+   carry it (`srl-pdf-cover-*`, `srl-pdf-toc-item-*`). Not affected: the srl library tokens
+   (`--srl-typo-*` font settings, which customers already set under `@media print` only,
+   and `--srl-color-*`) and variables that existed before the label was introduced
+   (`srl-table-border-*`, `srl-footnote-number-width`).
 3. Customer-specific selector rules sometimes need `!important` to beat base styles.
    Keep them in the matching partial (`table.scss`, `typography.scss`, ...).
 4. Fonts: declare `@font-face` in `scss/fonts.scss` with a relative `$font-path: "./fonts"`.
