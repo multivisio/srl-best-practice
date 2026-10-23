@@ -15,10 +15,9 @@ description: >
 
 # Migrating an SRL 1 project to SRL 2
 
-Learned from migrating a real customer project (nsfd_magazine, 133 own components,
-custom Izanagi shell) with SRL 2 `2.0.0-alpha.0`. For SRL 1 conventions use the
-`srl-best-practice` skill; for SRL 2 itself read `README.md` of the srl workspace
-(`multivisio/srl-workspace`).
+Learned from migrating a real customer project (133 own components, custom Izanagi
+shell) with SRL 2 `2.0.0-alpha.0`. For SRL 1 conventions use the `srl-best-practice`
+skill; for SRL 2 itself read the `README.md` of the SRL 2 sources.
 
 Mapping tables (files, aliases, imports, what is dropped):
 [references/mapping.md](references/mapping.md).
