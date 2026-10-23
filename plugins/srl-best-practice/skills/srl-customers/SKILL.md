@@ -54,6 +54,29 @@ pdf/customers/nspXXX-<name>/
    `@/utils/pdf/PDFTablePageSplit` with customer options). They run on top of the base
    `pdf.js`.
 
+## Rendering a customer PDF locally
+
+- Each customer has a `pdf-<name>` script next to `build-<name>`:
+  `"pdf-greiner": "pdf-reactor pdf --customer nsp281-greiner"`. It runs the global
+  `pdf-reactor` command (repo `multivisio/pdf-reactor`, `~/.local/bin/pdf-reactor`), which starts
+  the PDFreactor Docker container on demand.
+- Input is the customer's ns.wow PDF export, saved as `pdf/customers/<folder>/pdf.html`. The
+  exports differ a lot between customers (especially tables), so each customer keeps its own.
+  It is customer data: `.gitignore` has `/pdf/customers/*/pdf.html`. Check with
+  `git check-ignore -v` before working with a new export and never commit it.
+- The tool runs `npm run build-pdf -- --no-clean --customer <folder>` (project script
+  `"build-pdf": "srl build -t pdf"`, no version prompt because there is no `ldd` target), strips
+  the export's own `<link>`/`<script>` tags (they point at the deployed NSWOW files), adds local
+  `pdf.css`/`pdf.js` and then the customer files in the order of
+  `.output/ldd/pdf/nspXXX/pdf-configuration.xml`, served from `.output/ldd/pdf/` so relative
+  font and asset URLs resolve as in NSWOW.
+- Output: `.output/pdf-reactor/<folder>.pdf` (named after the customer), HTML sent to PDFreactor
+  in `.output/pdf-reactor/last-wrapper.html`.
+- Options pass through: `npm run pdf-greiner -- --watch` (re-renders on changes in the customer
+  folder, `src/`, `livingdocs/`), `-- --skip-build`, `-- --file <other export>`,
+  `-- --mode components` (all components with the customer styles, no export needed).
+- Without a licence key PDFreactor adds a watermark and an evaluation page after page 1.
+
 ## Packaging
 
 `package-designs.mjs` (postbuild, or `npm run package-designs`) zips `.output/ldd` into
