@@ -61,6 +61,22 @@ pdf/customers/nspXXX-<name>/
    `@/utils/pdf/PDFTablePageSplit` with customer options). They run on top of the base
    `pdf.js`.
 
+## Design handover via Figma
+
+Template for aligning a customer's PDF design: Figma file "SRL advanced-ld – Kunden-Design-Tokens"
+(https://www.figma.com/design/i9MXNC8Qa0kSteyYFCVk4f, MULTIVISIO team). It holds every CSS variable the
+base exposes for the PDF (489 at creation, built from `.output/ldd/pdf/pdf.css` of main) as Figma variables
+in five collections: 1 Farben, 2 Typografie, 3 Abstände & Raster, 4 Seite (PDF), 5 Komponenten. Each
+variable has its CSS name as WEB code syntax and two modes: "Kunde" (edited) and "Basis" (reference).
+Pages: Anleitung, Design Tokens, Komponenten (bound Figma components with explanations), Beispielseiten
+(A4 text flow), Übergabe (mapping table and transfer rules).
+
+- Workflow: duplicate the file per customer, change only the "Kunde" mode, transfer every value that
+  differs from "Basis" as `:root` variable into the overlay (values in pt, aliases as `var(--srl-…)`,
+  title borders combined as `<width>pt solid <color>`).
+- Values are the print (PDF) values in pt; line-height is stored absolute in pt (valid in CSS too).
+- When the base gets new or renamed variables, update the template file as well.
+
 ## Rendering a customer PDF locally
 
 - Each customer has a `pdf-<name>` script next to `build-<name>`:
