@@ -48,6 +48,11 @@ pdf/customers/nspXXX-<name>/
    change, so the design.zip must be uploaded too (see Deployment).
    Variable names need no `pdf`/`web` label: customer overlays only reach the PDF.
    Never rename variables customers already set (e.g. `--srl-table-background-NN`).
+   Examples in advanced-ld (branch `feature/customer-css-variables-base`, not in main yet):
+   borders and paddings around titles per side, `--srl-title-h1..h6-border-<side>` /
+   `-padding-<side>` and `--srl-heading-level-7..9-border-<side>` / `-padding-<side>`
+   (mixin `src/assets/scss/mixins/_border-padding.scss`, defaults: none / 0). Sub- and
+   superscript offsets have no variables on purpose; they stay as customer CSS for now.
 3. Customer-specific selector rules sometimes need `!important` to beat base styles.
    Keep them in the matching partial (`table.scss`, `typography.scss`, ...).
 4. Fonts: declare `@font-face` in `scss/fonts.scss` with a relative `$font-path: "./fonts"`.
