@@ -11,6 +11,14 @@
   run in the nswow PDF preview next to the editor as well, not only in the final
   PDF. Layout scripts (page sides, splitting) then also apply in the preview, so
   no separate no-JavaScript fallback styles are needed for it.
+- Keep the element order of the live `pdf-configuration.xml` that ns.wow expects,
+  another order can cause problems there: `userScripts`
+  (`beforeDocumentScripts` + `uri`), `userStyleSheets`, `viewerPreferences`,
+  `appendLog`, `addTags`, then debug-only elements such as `inspectableSettings`.
+  When a build script writes the file, write it in exactly this order.
+- `inspectableSettings` (`<enabled>true</enabled>`) makes the PDF inspectable
+  (structure and styles can be read out). Good for local renders and for a short
+  live check; remove it from the live configuration again afterwards.
 - Library helpers in `srl/pdf/`:
   - `PDFNestedContainers({ selector: '.srl-nested-container' })` adds
     `<class>-first` / `<class>-last` to containers based on their first/last child,
@@ -29,6 +37,15 @@
 
 - PDFreactor lays the document out, runs the scripts, and renders the modified
   DOM. Everything must run synchronously in `DOMContentLoaded` / `load`.
+- `pdf.js` is not always loaded before the document: as a user script without
+  `beforeDocumentScripts`, or through a script tag added later, `DOMContentLoaded`
+  and `load` are already over and their listeners never run (nothing of the PDF
+  scripts happens). Inline, a static `<script src>` in the head and a user script
+  with `beforeDocumentScripts` work. Start the entry and the layout scripts with a
+  check of `document.readyState`: `'loading'` → wait for `DOMContentLoaded`,
+  otherwise run now; for layout scripts `'complete'` → run now, otherwise wait for
+  `load`. Constructors keep their order, so a script that must run before another
+  still does.
   `setTimeout` and Promises run too late and are effectively ignored.
 - Layout information (`ro.layout.getBoxDescriptions(el)`) is only available in
   `load`. `ro.layout.forceRelayout()` lays the document out again synchronously.
@@ -87,6 +104,14 @@
   spanning rows together.
 - Split tall grid elements only between lines (text) or rows (tables), clone the
   wrapper path, table `colgroup`/`thead`, and mark continuations with a class.
+- Column widths of exported tables come as `<style>` blocks inside each table
+  (`.srl-table-tabXXX-colN { width: N% }`, one per column of the table
+  definition). The PDF keeps them; a local renderer must not strip body styles.
+  The selectors are global: when the same table definition (`tabXXX`) appears
+  several times with different widths, the last definition wins for every table
+  of that definition in the full PDF, while the editor (one page) looks right.
+  Check the export for conflicting definitions before suspecting the design; the
+  clean fix is a table definition of its own for the differing tables.
 
 ## Document ns.wow sends to PDFreactor
 
