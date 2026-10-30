@@ -120,6 +120,13 @@
   of that definition in the full PDF, while the editor (one page) looks right.
   Check the export for conflicting definitions before suspecting the design; the
   clean fix is a table definition of its own for the differing tables.
+- `pdf.css` loaded as a `userStyleSheet` (via `pdf-configuration.xml`) is
+  applied after the document styles, also after these body `<style>` blocks;
+  inline in the head it comes before them. Any design rule with the same
+  specificity that sets `width` on `col` then wins over the table widths, e.g. a
+  wildcard such as `.srl-columns__column * { width: 100% }` turns all columns of
+  tables in a column container equal. Keep such rules off table columns
+  (`*:not(col)`) and test column widths with pdf.css loaded both ways.
 
 ## Document ns.wow sends to PDFreactor
 
