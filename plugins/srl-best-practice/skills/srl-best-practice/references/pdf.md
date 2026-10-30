@@ -46,14 +46,17 @@
   `beforeDocumentScripts`, or through a script tag added later, `DOMContentLoaded`
   and `load` are already over and their listeners never run (nothing of the PDF
   scripts happens). Inline, a static `<script src>` in the head and a user script
-  with `beforeDocumentScripts` work. Start the entry and the layout scripts with a
-  check of `document.readyState`: `'loading'` → wait for `DOMContentLoaded`,
-  otherwise run now; for layout scripts `'complete'` → run now, otherwise wait for
-  `load`. Constructors keep their order, so a script that must run before another
-  still does.
+  with `beforeDocumentScripts` work. Start the entry with a check of
+  `document.readyState`: `'loading'` → wait for `DOMContentLoaded`, otherwise run
+  now. Use no second event (`load`) for the layout scripts, it is not needed and
+  can be missed the same way.
   `setTimeout` and Promises run too late and are effectively ignored.
-- Layout information (`ro.layout.getBoxDescriptions(el)`) is only available in
-  `load`. `ro.layout.forceRelayout()` lays the document out again synchronously.
+- `ro.layout.getBoxDescriptions(el)` lays the document out on demand, so layout
+  scripts do not need to wait for `load`: an A/B test (wait for `load` vs. run
+  right away in `DOMContentLoaded`, full 500-page report) gave identical logs,
+  text and pixels. Run the DOM-only scripts first, then the layout scripts, in
+  one handler. `ro.layout.forceRelayout()` lays the document out again
+  synchronously.
 - **Reading layout after any DOM change triggers a full relayout, once per
   read.** Read everything you need first (a compact snapshot: page index,
   left/right, lines), then change the DOM, then read again only after an explicit
