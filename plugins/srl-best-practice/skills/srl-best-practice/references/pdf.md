@@ -11,11 +11,16 @@
   run in the nswow PDF preview next to the editor as well, not only in the final
   PDF. Layout scripts (page sides, splitting) then also apply in the preview, so
   no separate no-JavaScript fallback styles are needed for it.
+- The other way: upload `pdf.js` and `pdf.css` on their own in ns.wow and leave
+  `userScripts` / `userStyleSheets` out of the `pdf-configuration.xml`. Never do
+  both, the files would be included twice. Which way a project uses is the
+  project's decision; a build script should then write exactly that variant.
 - Keep the element order of the live `pdf-configuration.xml` that ns.wow expects,
   another order can cause problems there: `userScripts`
   (`beforeDocumentScripts` + `uri`), `userStyleSheets`, `viewerPreferences`,
   `appendLog`, `addTags`, then debug-only elements such as `inspectableSettings`.
-  When a build script writes the file, write it in exactly this order.
+  Elements a project does not use are left out, the rest keeps this order. When
+  a build script writes the file, write it in exactly this order.
 - `inspectableSettings` (`<enabled>true</enabled>`) makes the PDF inspectable
   (structure and styles can be read out). Good for local renders and for a short
   live check; remove it from the live configuration again afterwards.
