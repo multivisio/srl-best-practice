@@ -56,6 +56,15 @@ pdf/customers/nspXXX-<name>/
 5. Customer PDF scripts go in `custom.ts` (e.g. `initializeTablePageSplit` from
    `@/utils/pdf/PDFTablePageSplit` with customer options). They run on top of the base
    `pdf.js`.
+6. **A customer `page:` override switches off the base page options.** Customers with a
+   special page format often set their own named page on full-page components
+   (`.srl-pdf-page { page: full-bleed-<customer>; }`). That rule has the same specificity as
+   option classes like `.srl-hide-page-margin-boxes` and is loaded later, so the option stops
+   working (page number and running headers stay visible). Give the customer a matching
+   `@page full-bleed-<customer>-without-page-margin-boxes` that empties every margin box the
+   base or the customer fills, and select it with
+   `.srl-pdf-page.srl-hide-page-margin-boxes:not(<landscape layout classes>)`, so landscape
+   layouts keep the base pages. Check the cover the same way.
 
 ## Design handover
 
