@@ -67,12 +67,14 @@ pdf/customers/nspXXX-<name>/
    layouts keep the base pages. Check the cover the same way.
 7. **Inline text formats come in two shapes.** The editor's context menu writes
    `<strong class="srl-bold">` and `<em class="srl-italic">`, but keyboard shortcuts also work
-   in the editor and write plain `<strong>`/`<b>`, `<em>`/`<i>` and `<u>` (no class). Style
-   both shapes together in the base (`[class*="bold"], strong, b`, `.srl-italic, em, i`,
-   `.srl-underline, u`), with the bold weight as a variable (e.g. `--srl-bold-font-weight`,
-   default from `srl.$meta`). Each customer sets it to a weight its bold `@font-face` really
-   has; check `<strong>` without class in exports too. A family without an italic face gets a
-   slanted (synthetic) italic in PDFreactor.
+   in the editor and write plain `<strong>`/`<b>`, `<em>`/`<i>` and `<u>` (no class). A base
+   that styles bold with a fixed weight from `srl.$meta` and leaves `em`/`i`/`u` to the
+   renderer is not changed for this without agreement; style both shapes in the customer
+   overlay instead (`.srl-bold, strong, b` with a weight the bold `@font-face` really has,
+   `.srl-italic, em, i`, `u`). Typography entries like `paragraph-strong` exist as
+   `--srl-typo-*` variables but no base rule reads them for inline bold, so write the value
+   directly. Check exports for `<strong>` without class. A family without an italic face gets
+   a slanted (synthetic) italic in PDFreactor.
 
 ## Design handover
 
