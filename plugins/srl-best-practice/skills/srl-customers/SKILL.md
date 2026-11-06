@@ -65,6 +65,14 @@ pdf/customers/nspXXX-<name>/
    base or the customer fills, and select it with
    `.srl-pdf-page.srl-hide-page-margin-boxes:not(<landscape layout classes>)`, so landscape
    layouts keep the base pages. Check the cover the same way.
+7. **Inline text formats come in two shapes.** The editor's context menu writes
+   `<strong class="srl-bold">` and `<em class="srl-italic">`, but keyboard shortcuts also work
+   in the editor and write plain `<strong>`/`<b>`, `<em>`/`<i>` and `<u>` (no class). Style
+   both shapes together in the base (`[class*="bold"], strong, b`, `.srl-italic, em, i`,
+   `.srl-underline, u`), with the bold weight as a variable (e.g. `--srl-bold-font-weight`,
+   default from `srl.$meta`). Each customer sets it to a weight its bold `@font-face` really
+   has; check `<strong>` without class in exports too. A family without an italic face gets a
+   slanted (synthetic) italic in PDFreactor.
 
 ## Design handover
 
