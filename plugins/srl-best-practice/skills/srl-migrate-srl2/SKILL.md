@@ -227,3 +227,12 @@ apply.
     is a page: `SrlPageDialog` and its layout `SrlPageDialogContent` (SRL 1 `src/Dialog.vue`) are
     the dialog; SRL 1 `SrlPageApp`, `SrlPageData`, `SrlPageModal` are gone (`app/app.vue`, the
     `SrlPage.vue` route with `useSrlArticle`, `SrlPageDialog`).
+22. **DevView and DevTools.** SRL 1 `src/views/DevView.vue` (`/:locale/dev`, dev only) →
+    `app/views/DevView.vue`; `srl dev` serves it under `/<locale>/dev`, never in a build (restart
+    `srl dev` after creating it). Drop `Autoload.init`; livingdocs components are global
+    `SrlLd<Name>`. The SRL 1 DevTools overlay (`SrlDevTools`) became a pinned **SRL** tab in the
+    Nuxt DevTools (viewport, grid, spacer, colors, typography of `srl.config`) plus a grid overlay
+    and a draggable viewport badge on the page (click toggles the grid, it snaps to the nearest
+    edge). Dev only; off with `SRL_DISABLE_DEVTOOLS=true` (`VITE_DISABLE_SRL_DEVTOOLS` still
+    works). No naive-ui needed in the project. Older cores asked for the livingdocs alternative on
+    every `srl dev` when `srl.config.ts` had `alternative: null` (fixed).
