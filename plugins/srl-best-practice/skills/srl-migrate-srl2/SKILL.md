@@ -210,3 +210,8 @@ apply.
     `/srl/` to `.gitignore`. Project files with `@use "fa-font"`/`"fa-source"` still build, but
     IDEs only follow `srl/fa/font`/`srl/fa/source`. Older SRL 2 cores wrote the module to
     `.srl/scss/<target>/`, reachable only through the Vite alias (no IDE completion).
+    TypeScript: Nuxt writes the aliases (`#composables`, `#imports`, `~`, `@`) to
+    `.nuxt/tsconfig.app.json` (after `npm install`/`nuxt prepare`); core adds `livingdocs/`, so
+    aliases and auto-imports also resolve in the livingdocs components (VS Code: Vue extension).
+    Older cores left `livingdocs/` out. With `file:`-linked SRL packages, IDEs may not find
+    `vue-i18n` types in the project (not hoisted); installed from npm they are.
