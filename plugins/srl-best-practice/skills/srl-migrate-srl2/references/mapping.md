@@ -6,7 +6,7 @@
 |---|---|---|
 | `package.json` dependency `@simple-reporting/base` | `@simple-reporting/core` + `@simple-reporting/livingdocs`, `nuxt` | keep the old `name` (design name) |
 | `vite.config.ts`, `index.html`, `env.d.ts`, `tsconfig.*` | `nuxt.config.ts` (`modules: ['@simple-reporting/core']`), `tsconfig.json` from the template | custom Vite plugins: check if still needed |
-| `srl.config.json` | `srl.config.json` (still read) or `srl.config.ts` | add `project.livingdocs.alternative` |
+| `srl.config.json` | `srl.config.ts` (convert with `migrateJsonConfig`; a JSON file alone still works) | add `project.livingdocs.alternative` |
 | `livingdocs.config.json` (generated + hand-maintained) | `livingdocs.config.json` with hand-maintained keys only | full design: `dist/editor/design.json` |
 | `livingdocs/` | `livingdocs/` | format unchanged, copy 1:1 |
 | `public/json/*.json`, nswow `html/`, `images/`, `downloads/` | `data/` via `srl data import <zip>` | `data/` is gitignored, nswow fills it for the build |
