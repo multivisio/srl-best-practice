@@ -55,9 +55,14 @@ Mapping tables (files, aliases, imports, what is dropped):
    imported; see step 6 for assets the project still needs from it.
 4. **Take over the design part** (format unchanged):
    - replace `livingdocs/` with the old folder
-   - copy `srl.config.json` and delete the template `srl.config.ts` (only one config may
-     exist). Add `"project": { "livingdocs": { "alternative": null } }`, otherwise
-     `srl dev` asks for it.
+   - the SRL 2 project uses `srl.config.ts`. Delete the template `srl.config.ts`, copy
+     the old `srl.config.json`, add `"project": { "livingdocs": { "alternative": null } }`
+     (otherwise `srl dev` asks for it), then convert it; there is no `srl` command for it:
+     ```bash
+     node -e "import('@simple-reporting/core/config').then(m => m.migrateJsonConfig(process.cwd(), { removeJson: true }))"
+     ```
+     This writes `export default defineSrlConfig({...})` and deletes the JSON. Keep only one
+     config: if both exist, the `.ts` wins and the `.json` is silently ignored.
    - `livingdocs.config.json`: copy only the hand-maintained keys. Drop the generated
      ones: `name`, `version`, `assets`, `groups`, `components`, `componentProperties`.
    - copy `pdf/pdf-configuration*.xml`; the template `pdf/entry.ts` already replaces
