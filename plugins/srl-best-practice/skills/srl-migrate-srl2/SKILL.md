@@ -220,3 +220,10 @@ apply.
     union of legacy and composition API: use `I18n<{}, {}, {}, string, false>` (core runs
     `legacy: false`). Imports `*.svg?component|url|raw|skipsvgo` have types from core
     (`.nuxt/srl/svg.d.ts`); older cores showed them as unresolved.
+21. **Special pages are for backward compatibility only.** nswow routing entries with
+    `component` (`Search`, `DownloadCenter`, `ErrorView`, uuids like `search-999`) are rendered by
+    `SrlPage<component>` (`app/components/Srl/Page/<component>.vue` overrides the core one). Port
+    existing ones this way, but do not build new features as such views. Not every `SrlPage…`
+    is a page: `SrlPageDialog` and its layout `SrlPageDialogContent` (SRL 1 `src/Dialog.vue`) are
+    the dialog; SRL 1 `SrlPageApp`, `SrlPageData`, `SrlPageModal` are gone (`app/app.vue`, the
+    `SrlPage.vue` route with `useSrlArticle`, `SrlPageDialog`).
