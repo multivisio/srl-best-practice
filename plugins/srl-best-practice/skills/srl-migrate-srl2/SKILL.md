@@ -113,9 +113,9 @@ When the SRL 1 project keeps changing after the migration:
 
 ## Known pitfalls
 
-Status: the fixes for pitfalls 2–6 and the hook `srl:article:html` (pitfall 15) are on the
-core branch `feature/srl1-sync-2026-11` (2026-11-09). Once merged, those pitfalls only matter
-for older core versions.
+Status: the fixes for pitfalls 2–6 and the hook `srl:article:html` (pitfall 15) are in core
+`main` since 2026-11-09 (after `2.0.0-alpha.0`). With older core versions those pitfalls still
+apply.
 
 1. **Misleading Sass error.** `Can't find stylesheet to import` pointing at
    `@use "@simple-reporting/core/scss/init-root.scss"` in `.srl/scss/entries/app.scss`
