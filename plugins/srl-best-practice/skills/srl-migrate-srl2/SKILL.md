@@ -193,3 +193,11 @@ apply.
     (`@simple-reporting/core/dist/shared/uri` fails with "not exported"). Older cores
     registered all components globally, which printed `INEFFECTIVE_DYNAMIC_IMPORT` warnings
     for `SrlMenu`/`SrlMenuItem` on every build (fixed: only `SrlPage*` are global).
+19. **404 page.** The nswow article with the slug `404` (per locale) is the error page; without
+    one, the special page `ErrorView`. Unknown paths render it with status 404 and `noindex`,
+    and `nuxt generate` replaces Nuxt's client-only `404.html` with the prerendered 404 page of
+    the default locale (log: `404.html written from /<locale>/404`). On the client Nuxt then
+    switches the URL to that path. Shell code that derives classes or links from the current
+    page must use `useSrlCurrentEntry`/`useArticle` (they return the 404 page on unknown
+    paths), not `byPath[route.path]`, or hydration of `404.html` mismatches. Older cores showed
+    the Nuxt error page and wrote an empty `404.html`.
