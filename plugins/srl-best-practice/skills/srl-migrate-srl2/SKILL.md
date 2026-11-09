@@ -201,3 +201,12 @@ apply.
     page must use `useSrlCurrentEntry`/`useArticle` (they return the 404 page on unknown
     paths), not `byPath[route.path]`, or hydration of `404.html` mismatches. Older cores showed
     the Nuxt error page and wrote an empty `404.html`.
+20. **`srl/` folder and IDE code completion.** SRL 2 writes the generated SCSS module to `srl/`
+    in the project (gitignored, every file has a do-not-edit header), one folder for all
+    targets; only `srl/config.scss` is rewritten per target build. Because it is a real
+    folder, PhpStorm resolves `@use 'srl'`, `srl/typography`, `srl/fa` without setup; VS Code
+    needs the Some Sass extension with `"somesass.workspace.loadPaths": ["."]` (new projects
+    get it in `.vscode/`). Delete the SRL 1 `srl/` folder before the first `srl dev` and add
+    `/srl/` to `.gitignore`. Project files with `@use "fa-font"`/`"fa-source"` still build, but
+    IDEs only follow `srl/fa/font`/`srl/fa/source`. Older SRL 2 cores wrote the module to
+    `.srl/scss/<target>/`, reachable only through the Vite alias (no IDE completion).
