@@ -213,5 +213,10 @@ apply.
     TypeScript: Nuxt writes the aliases (`#composables`, `#imports`, `~`, `@`) to
     `.nuxt/tsconfig.app.json` (after `npm install`/`nuxt prepare`); core adds `livingdocs/`, so
     aliases and auto-imports also resolve in the livingdocs components (VS Code: Vue extension).
-    Older cores left `livingdocs/` out. With `file:`-linked SRL packages, IDEs may not find
-    `vue-i18n` types in the project (not hoisted); installed from npm they are.
+    Older cores left `livingdocs/` out. `useI18n` is an auto-import: drop
+    `import { useI18n } from 'vue-i18n'` from ported code. `vue-i18n` is a core dependency; when
+    the project cannot resolve it (not hoisted), core maps it in the tsconfig, so `$t` and
+    `import type { I18n } from 'vue-i18n'` have types. Then `I18n` without type arguments is a
+    union of legacy and composition API: use `I18n<{}, {}, {}, string, false>` (core runs
+    `legacy: false`). Imports `*.svg?component|url|raw|skipsvgo` have types from core
+    (`.nuxt/srl/svg.d.ts`); older cores showed them as unresolved.
