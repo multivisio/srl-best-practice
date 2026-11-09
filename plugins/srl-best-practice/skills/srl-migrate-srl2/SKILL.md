@@ -33,8 +33,9 @@ Mapping tables (files, aliases, imports, what is dropped):
 3. **Ask before choosing a direction** when there are several plausible ways (where assets
    come from, whether to fix SRL 2 or work around it, how far to port the shell).
 4. **Bugs in SRL 2 are fixed in SRL 2**, not worked around in the project: feature branch
-   in the srl workspace, test, rebuild core (`npm run build` in the workspace), push the
-   branch. Restart `srl dev` afterwards (see pitfall 11).
+   in the package repository (core, livingdocs or create), test, rebuild core (`npm run build`
+   in core), push the branch. Projects use the local clones via `file:` dependencies until the
+   packages are on npm. Restart `srl dev` afterwards (see pitfall 11).
 5. **Commit the migrated project in small steps** (data/livingdocs → shell → assets →
    builds), so each step can be compared.
 
@@ -98,10 +99,23 @@ Mapping tables (files, aliases, imports, what is dropped):
 10. **Write down what is left**: SRL 2 issues found (with branch), content warnings from
     `srl doctor`, assets that were already missing in SRL 1.
 
+## Updating a migrated project
+
+When the SRL 1 project keeps changing after the migration:
+
+1. Note the SRL 1 commit the port is based on; diff from there (`git diff <old> <new>`).
+2. `livingdocs/`: apply the diff as a patch, rewriting SCSS paths into the old shell first,
+   e.g. `git diff <old> <new> -- livingdocs/ | sed 's#\.\./src/assets/#../app/assets/#g' | git apply`.
+3. Shell files: if the SRL 2 copy still equals the old SRL 1 version, apply the diff with
+   `--relative=src --src-prefix=a/app/ --dst-prefix=b/app/`; port the diverged ones by hand.
+4. `livingdocs.config.json`: compare only the hand-maintained keys.
+5. Content data (`public/json`) of the SRL 1 repo is not the source; import a new nswow zip.
+
 ## Known pitfalls
 
-Status refers to the srl workspace branch `fix/livingdocs-tags-with-digits`
-(2026-10-12). If a fix is merged, the pitfall only matters for older core versions.
+Status: the fixes for pitfalls 2–6 and the hook `srl:article:html` (pitfall 15) are on the
+core branch `feature/srl1-sync-2026-11` (2026-11-09). Once merged, those pitfalls only matter
+for older core versions.
 
 1. **Misleading Sass error.** `Can't find stylesheet to import` pointing at
    `@use "@simple-reporting/core/scss/init-root.scss"` in `.srl/scss/entries/app.scss`
@@ -151,3 +165,16 @@ Status refers to the srl workspace branch `fix/livingdocs-tags-with-digits`
     (`unicodedata.normalize('NFC', name) != name`); with NFC names the plugin is not needed.
 14. **The SRL 1 build in the nswow zip can be stale** (older than the component sources)
     and may hang a headless browser. Use it for orientation only; trust the sources.
+15. **Vite plugins that patch the SRL 1 HTML pipeline** (a `transform` on `.srl/utils/html`
+    that wraps `prepareHtmlContent`, e.g. to turn `.lc-anchor` into ids, because Vue patched
+    DOM-only changes back). SRL 2 prepares articles on the server: register the Nitro hook
+    `srl:article:html` in `server/plugins/*.ts` and rewrite `ctx.html` there with `parse5`
+    (no `DOMParser` on the server). The result is in the prerendered HTML. The hook does not
+    run in preview mode, so keep the client-side fallback if the project has one.
+16. **Site search that fetches `./html/<lang>/<name>.html`** in the browser. SRL 2 does not
+    ship the raw article HTML. Use the prebuilt index of `useSrlSearch({ locale })`
+    (`index` = `{ uuid, path, title, text }`, text of h1–h3 and p).
+17. **`index.html` head** (tag manager, favicons, title) → `app.head` in `nuxt.config.ts`.
+    Links that SRL 1 resolved via `<base href>` need the base URL: `useHead` in `app.vue`
+    with `useRuntimeConfig().app.baseURL`. Favicons come from the nswow zip (`favicons/`),
+    which `srl data import` skips; copy them to `public/favicons/`.
