@@ -183,3 +183,13 @@ apply.
     Links that SRL 1 resolved via `<base href>` need the base URL: `useHead` in `app.vue`
     with `useRuntimeConfig().app.baseURL`. Favicons come from the nswow zip (`favicons/`),
     which `srl data import` skips; copy them to `public/favicons/`.
+18. **Project components with core names.** A file under the same path in `app/components/`
+    replaces the core component everywhere, also inside other core components:
+    `Srl/Menu/Item.vue` → `SrlMenuItem`, `Srl/Page/Search.vue` → `SrlPageSearch`. Usually this
+    only happens by accident in a migration when old components happen to have these names;
+    otherwise override on purpose only when there is no other way. `app/app.vue` is never
+    affected (core ships no `app.vue`). When copying a core component as a template, fix its
+    imports: relative paths no longer resolve, and core does not export its internal files
+    (`@simple-reporting/core/dist/shared/uri` fails with "not exported"). Older cores
+    registered all components globally, which printed `INEFFECTIVE_DYNAMIC_IMPORT` warnings
+    for `SrlMenu`/`SrlMenuItem` on every build (fixed: only `SrlPage*` are global).
