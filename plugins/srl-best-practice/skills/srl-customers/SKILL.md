@@ -82,6 +82,12 @@ pdf/customers/nspXXX-<name>/
    background (e.g. a coloured ToC page) is covered by the base's white `body` background inside the
    type area; set `body.pdf { background: transparent; }` in the overlay.
 
+9. **Shared customer layer on top of the base.** When several customers share a SCSS module
+   between base and overlay (a mixin that resets base defaults for a group of customers), check
+   every base change against that module: does it break a rule there, and does it make a workaround
+   there obsolete (then remove it and re-render the customers using it)? Comment each workaround with
+   the base rule it compensates for, so it can be found again.
+
 ## Design handover
 
 - A designer can align a customer's PDF design in a design tool when each design token there
