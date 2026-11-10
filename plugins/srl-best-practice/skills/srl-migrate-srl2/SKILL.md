@@ -182,7 +182,13 @@ apply.
 17. **`index.html` head** (tag manager, favicons, title) → `app.head` in `nuxt.config.ts`.
     Links that SRL 1 resolved via `<base href>` need the base URL: `useHead` in `app.vue`
     with `useRuntimeConfig().app.baseURL`. Favicons come from the nswow zip (`favicons/`),
-    which `srl data import` skips; copy them to `public/favicons/`.
+    which `srl data import` skips; copy them to `public/favicons/`. Do not move the tag manager
+    snippet to `app.head.script`: with SSR it runs before hydration, and scripts it loads (e.g.
+    HubSpot, which appends `__hstc`/`__hssc`/`__hsfp` to links) change the DOM first, so every
+    such link logs a hydration attribute mismatch ("Hydration completed but contains
+    mismatches"). Load it from a `*.client.ts` plugin in `onNuxtReady` (ID in
+    `runtimeConfig.public`); keep only the `<noscript>` iframe in `app.head`. Also strip copied
+    tracking parameters from hard-coded links (locales, settings).
 18. **Project components with core names.** A file under the same path in `app/components/`
     replaces the core component everywhere, also inside other core components:
     `Srl/Menu/Item.vue` → `SrlMenuItem`, `Srl/Page/Search.vue` → `SrlPageSearch`. Usually this
@@ -236,3 +242,11 @@ apply.
     edge). Dev only; off with `SRL_DISABLE_DEVTOOLS=true` (`VITE_DISABLE_SRL_DEVTOOLS` still
     works). No naive-ui needed in the project. Older cores asked for the livingdocs alternative on
     every `srl dev` when `srl.config.ts` had `alternative: null` (fixed).
+23. **Dev server warnings.** "Vite discovered new dependencies at runtime" lists client packages
+    imported by project code (`countup.js`, `exceljs`, `lottie-web`, tracking libs): add them to
+    `vite.optimizeDeps.include` in `nuxt.config.ts`, or the page reloads on the first visit.
+    Core pre-bundles its own (`vue-i18n`, `parse5`, `@vue/devtools-core`); older cores left them
+    in that list. `NUXT_E8006` (payload over 100 kB) for `srl-article-<locale>-<uuid>` is
+    expected on long pages: the prepared article is the page content and must be in the payload
+    for hydration. `Plugin "nuxt:devtools:config-retriever" defines Vite-specific hooks` comes
+    from `@nuxt/devtools` before 3.4.4 with Vite 8; updating Nuxt (≥ 4.6.4) fixes it.
