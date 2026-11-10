@@ -95,6 +95,11 @@ pdf/customers/nspXXX-<name>/
   to the customer value. Only the values that differ go into the overlay as `:root` variables.
 - Use print values in pt; a line height in pt is valid in CSS as well.
 - Aliases stay references in CSS: `var(--srl-color-primary-1000)`.
+- Line heights: the base typography often uses a unitless ratio (e.g. 1.444), while a token file stores
+  the base value absolute (13pt). If only the font size changes for a customer, the line height in the
+  token file stays 13pt but the base scales it (8.5pt × 1.444 = 12.3pt). Whenever a font size differs,
+  set the line height explicitly too, even if the token says "unchanged". Same check for any token
+  whose base value in the token file differs from the real base default (compare with the built CSS).
 - When the base gets new or renamed variables, the token file needs the same change.
 - Check the sample layouts against the tokens before taking the values over. Typical slips: a
   font-weight token says 900 while the text layers show a lighter style (e.g. the weight's style
