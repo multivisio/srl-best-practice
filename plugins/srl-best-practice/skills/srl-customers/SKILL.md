@@ -41,7 +41,11 @@ pdf/customers/nspXXX-<name>/
 1. **Override variables, not selectors.** Base component SCSS exposes tweakable values as
    CSS custom properties via `srl.system-root-style(<var-name>, <default>)`. Customers set
    those variables or the `--srl-color-*` tokens on `:root` in their partials.
-2. If a customer needs a value the base does not expose yet, prefer adding a new
+2. **The base may belong to someone else.** In a shared design the base is often maintained by another team
+   or the platform provider. Then change it only after agreeing with them: put a base change on its own
+   branch, containing nothing else, and open a PR for discussion instead of merging it yourself. What only one
+   group of customers needs belongs in a shared customer layer (see 9) or the overlay, not in the base.
+   If a customer needs a value the base does not expose yet, prefer adding a new
    `srl.system-root-style(...)` variable to the base component (with the current value as
    default) over duplicating the selector in the customer overlay. Note: that is a base
    change, so the design.zip must be uploaded too (see Deployment).
