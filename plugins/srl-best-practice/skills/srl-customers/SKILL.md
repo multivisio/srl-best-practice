@@ -75,6 +75,12 @@ pdf/customers/nspXXX-<name>/
    `--srl-typo-*` variables but no base rule reads them for inline bold, so write the value
    directly. Check exports for `<strong>` without class. A family without an italic face gets
    a slanted (synthetic) italic in PDFreactor.
+8. **Own page format (e.g. 210 × 280 mm).** `--srl-page-media-size` only changes the default
+   `@page`. Full-page components (cover, page reference) use named full-bleed pages that are fixed
+   to A4, so the customer needs its own named pages in that format (with and without margin boxes)
+   and selects them on those components, landscape layouts excluded. A customer `@page` with a
+   background (e.g. a coloured ToC page) is covered by the base's white `body` background inside the
+   type area; set `body.pdf { background: transparent; }` in the overlay.
 
 ## Design handover
 
@@ -84,6 +90,11 @@ pdf/customers/nspXXX-<name>/
 - Use print values in pt; a line height in pt is valid in CSS as well.
 - Aliases stay references in CSS: `var(--srl-color-primary-1000)`.
 - When the base gets new or renamed variables, the token file needs the same change.
+- Check the sample layouts against the tokens before taking the values over. Typical slips: a
+  font-weight token says 900 while the text layers show a lighter style (e.g. the weight's style
+  is not installed and the tool kept the old one), font-weight and font-style tokens contradict each
+  other, or the designer adds tokens the base does not read (e.g. spacing tokens). When asked to
+  follow the layouts, the visible value wins; list every mismatch for the designer.
 
 ## Rendering a customer PDF locally
 
