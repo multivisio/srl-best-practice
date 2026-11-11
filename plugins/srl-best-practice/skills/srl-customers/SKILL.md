@@ -57,6 +57,16 @@ pdf/customers/nspXXX-<name>/
    Keep them in the matching partial (`table.scss`, `typography.scss`, ...).
 4. Fonts: declare `@font-face` in `scss/fonts.scss` with a relative `$font-path: "./fonts"`.
    Only ship the font files that are actually referenced.
+   **PDFreactor splits TrueType fonts.** A `.ttf`/`.woff` with TrueType outlines is embedded
+   twice per weight: as a simple TrueType font (WinAnsi) for Latin-1 characters and as a
+   Type0/CID font (Identity-H) for everything else. Every text run (line fragment) that holds
+   one character outside Latin-1, such as ’ (U+2019) or – (U+2013), goes into the Type0 font
+   as a whole. On screen both look the same, but some printers print those lines bolder.
+   There is no PDFreactor option for this, and C1 code points (U+0092) are dropped. A font
+   with CFF outlines (`.otf`, `format("opentype")`) is embedded as one Type0 font per weight
+   and avoids the split. Check the embedded fonts of the PDF (e.g. PyMuPDF `page.get_fonts()`).
+   Converting a licensed font yourself (e.g. with fontTools) may break its licence; prefer an
+   official OTF version.
 5. Customer PDF scripts go in `custom.ts` (e.g. `initializeTablePageSplit` from
    `@/utils/pdf/PDFTablePageSplit` with customer options). They run on top of the base
    `pdf.js`.
