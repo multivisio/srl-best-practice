@@ -114,12 +114,16 @@ pdf/customers/nspXXX-<name>/
     instead of in the base, because the wanted width differs per design. Tables too wide for the page
     still squeeze them. The XBRL base uses `table-layout: fixed`, where cell widths from CSS do not
     take effect the same way.
-    Two traps in the PDF: (a) exports can give a table a `<colgroup>` with one `<col>` per column
-    (only classes like `srl-table-tab350-col2`, no width). PDFreactor then ignores the cell widths and
-    spreads the width over all columns; an explicit `width: auto` on `.srl-table col` makes the cell
-    widths count again (no script needed). (b) Table options that set the padding of all cells
-    (e.g. a small-padding option) have the same weight as the base `cut` rule and come later, so set
-    `padding: 0` on the cut cells again. Test with a current export: older ones may lack `<colgroup>`.
+    Two traps in the PDF: (a) exports can give a table a `<colgroup>` with one `<col>` per column, and
+    the platform writes the column widths of each table format as `<style>` blocks into the export
+    (e.g. `.srl-table-tab350-col2 { width: 0.3% }`). These widths are a setting and must stay
+    adjustable, so never reset `col` widths. With them PDFreactor ignores the cell width; an empty
+    block inside the cut cell (`.cut::before { content: ''; display: block; width: 8pt; height: 0 }`)
+    keeps the column at the fixed width while all `<col>` widths still apply. (b) Table options that
+    set the padding of all cells (e.g. a small-padding option) have the same weight as the base `cut`
+    rule and come later, so set `padding: 0` (and `border: none`, a transparent line still takes its
+    width) on the cut cells again. Test with a current export: older ones may lack `<colgroup>`. Dense
+    tables whose cut columns are set to a tiny percentage can overflow the page with a fixed width.
 
 ## Design handover
 
