@@ -114,6 +114,12 @@ pdf/customers/nspXXX-<name>/
     instead of in the base, because the wanted width differs per design. Tables too wide for the page
     still squeeze them. The XBRL base uses `table-layout: fixed`, where cell widths from CSS do not
     take effect the same way.
+    Two traps in the PDF: (a) exports can give a table a `<colgroup>` with one `<col>` per column
+    (only classes like `srl-table-tab350-col2`, no width). PDFreactor then ignores the cell widths and
+    spreads the width over all columns; an explicit `width: auto` on `.srl-table col` makes the cell
+    widths count again (no script needed). (b) Table options that set the padding of all cells
+    (e.g. a small-padding option) have the same weight as the base `cut` rule and come later, so set
+    `padding: 0` on the cut cells again. Test with a current export: older ones may lack `<colgroup>`.
 
 ## Design handover
 
