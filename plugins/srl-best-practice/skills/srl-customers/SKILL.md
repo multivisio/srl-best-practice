@@ -124,6 +124,13 @@ pdf/customers/nspXXX-<name>/
     rule and come later, so set `padding: 0` (and `border: none`, a transparent line still takes its
     width) on the cut cells again. Test with a current export: older ones may lack `<colgroup>`. Dense
     tables whose cut columns are set to a tiny percentage can overflow the page with a fixed width.
+12. **Table padding options.** Options like "PDF padding small/tiny" set the cell padding from the
+    `table.padding` entries in `srl.config.json` `meta`; often they only change top/bottom and keep
+    left/right, so they look nearly the same. To change them for one customer, override
+    `.srl-table.srl-pdf-padding-<level> :is(th, td)` in the overlay with the same weight as the base
+    rule (no extra body prefix): it wins by order, while first-cell indents (`[class*=ind]:first-child`)
+    and stronger cut rules still win. Reuse `var(--srl-table-padding-regular-top/-bottom)` for the
+    vertical part so every level matches the customer's normal padding.
 
 ## Design handover
 
