@@ -102,6 +102,19 @@ pdf/customers/nspXXX-<name>/
    there obsolete (then remove it and re-render the customers using it)? Comment each workaround with
    the base rule it compensates for, so it can be found again.
 
+10. **Raise specificity without the body class.** The customer `custom.scss` is compiled for the PDF
+    and for XBRL. A selector like `body.pdf .srl-…` only matches the PDF export, whose body has the
+    class `pdf`. Use `:root body .srl-…` instead: it has the same weight (0,1,1) as `body.pdf`, beats
+    base pairs like `.srl-margin-group-text + .srl-title-h2` (0,2,0) regardless of the stylesheet
+    order and matches every document. In a shared customer layer keep this prefix in one variable.
+11. **Separator columns (`cut`).** Empty narrow table columns with the cell class `cut` only get
+    `padding: 0` and transparent lines from the base, no width. In the automatic table layout of the
+    PDF they get a share of the free width, so their width changes from table to table. Give them a
+    fixed width per customer (`width`, `min-width`, `max-width` on `:root body .srl-table :is(td, th).cut`)
+    instead of in the base, because the wanted width differs per design. Tables too wide for the page
+    still squeeze them. The XBRL base uses `table-layout: fixed`, where cell widths from CSS do not
+    take effect the same way.
+
 ## Design handover
 
 - A designer can align a customer's PDF design in a design tool when each design token there
