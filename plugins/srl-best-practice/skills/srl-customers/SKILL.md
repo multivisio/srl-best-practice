@@ -67,6 +67,11 @@ pdf/customers/nspXXX-<name>/
    and avoids the split. Check the embedded fonts of the PDF (e.g. PyMuPDF `page.get_fonts()`).
    Converting a licensed font yourself (e.g. with fontTools) may break its licence; prefer an
    official OTF version.
+   **XBRL embeds every font as base64** (no `@media`, nothing loaded at runtime). When the
+   customer overlay declares any `@font-face`, the customer XBRL build leaves out the project
+   text fonts from `src/assets/fonts/**` (e.g. Inter); FontAwesome stays. So a customer that
+   still wants a base font in XBRL has to declare it in its own `scss/fonts.scss`
+   (`@simple-reporting/base` > 1.0.58).
 5. Customer PDF scripts go in `custom.ts` (e.g. `initializeTablePageSplit` from
    `@/utils/pdf/PDFTablePageSplit` with customer options). They run on top of the base
    `pdf.js`.
