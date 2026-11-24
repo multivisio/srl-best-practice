@@ -80,6 +80,21 @@ pdf/customers/nspXXX-<name>/
    Image floats (1.0.59) can be tuned per customer with `--srl-pdf-image-caption-columns`,
    `--srl-pdf-image-caption-width`, `--srl-pdf-image-caption-gap` and
    `--srl-pdf-image-flow-gap`.
+   **Name collisions with `pdf.js`.** PDFreactor loads the base `pdf.js` and the customer
+   `custom.js` as classic scripts in one global scope, and both are minified ES output with
+   top-level declarations. As soon as `custom.ts` imports a helper (e.g. the table split), the
+   minifier can give it a name that `pdf.js` already declares (`function F` vs. `const F`):
+   `SyntaxError: Variable "F" has already been declared`, and nothing in `custom.js` runs, not even
+   the page rules. Which names collide changes with every build, so a render that worked once proves
+   nothing. Check the `LogJavaScript` attachment of a debug render (PyMuPDF `embfile_get`) for
+   `ERROR-UNCAUGHT`. Fix: wrap the customer chunk in `(() => { ... })()`, e.g. with a small Vite
+   plugin in the project's `vite.config.ts` (`renderChunk` for `pdf/customers/*/custom.ts`; the
+   library build loads the project config). It changes only the overlays, not the base.
+   Table split (`initializeTablePageSplit`): cells `middle_lp`/`middle_rp` must be adjacent in
+   every row, header rows included, otherwise the table stays unsplit with a console warning. The
+   title spacer on the right page is only created when rows are also split by `pagebreak`, and it
+   lacks the title → table spacing; add both in the customer script/SCSS if the halves must line up.
+   The left half must start on a left page; the script does not force that.
 6. **A customer `page:` override switches off the base page options.** Customers with a
    special page format often set their own named page on full-page components
    (`.srl-pdf-page { page: full-bleed-<customer>; }`). That rule has the same specificity as
