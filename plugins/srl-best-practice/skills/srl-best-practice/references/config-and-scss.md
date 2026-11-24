@@ -165,3 +165,8 @@ in `word.scss` (e.g. `font-size: 10pt;`).
   in a placeholder file are not available as `srl.…`**. `@use` that file
   directly where you need them.
 - Fonts: `src/assets/fonts/**/*.scss` are included automatically.
+- Editor placeholders (`scss/editor`, from 1.0.59) take the full width and their own
+  vertical padding: `$placeholder-padding` (spacer `200`, fallback `1rem`);
+  `$placeholder-spacing` stays the outer margin. The `srl-editor-component` padding no
+  longer applies to placeholders, so the extra class is not needed for it. Remove local
+  placeholder width/padding fixes after the update.

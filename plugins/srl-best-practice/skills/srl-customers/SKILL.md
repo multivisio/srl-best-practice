@@ -74,7 +74,12 @@ pdf/customers/nspXXX-<name>/
    (`@simple-reporting/base` > 1.0.58).
 5. Customer PDF scripts go in `custom.ts` (e.g. `initializeTablePageSplit` from
    `@/utils/pdf/PDFTablePageSplit` with customer options). They run on top of the base
-   `pdf.js`.
+   `pdf.js`. From `@simple-reporting/base` 1.0.59 the build prepends the customer's
+   `@page` rules to `custom.js` (`window.__srlPDFOverlayPageRules`), so every customer
+   gets a `custom.js` and it is always in `pdf-configuration.xml`, also without `custom.ts`.
+   Image floats (1.0.59) can be tuned per customer with `--srl-pdf-image-caption-columns`,
+   `--srl-pdf-image-caption-width`, `--srl-pdf-image-caption-gap` and
+   `--srl-pdf-image-flow-gap`.
 6. **A customer `page:` override switches off the base page options.** Customers with a
    special page format often set their own named page on full-page components
    (`.srl-pdf-page { page: full-bleed-<customer>; }`). That rule has the same specificity as
@@ -187,3 +192,9 @@ The version comes from `design.json`.
   whether the change needs a new version or is just a CSS fix in the core.
 - When you finish a task, tell the user which ZIP(s) to upload: only the customer overlay,
   or the base design too.
+- **Updating `@simple-reporting/base` is a base change.** Upload the base design.zip and
+  rebuild the overlays of the customers you look after. With 1.0.59 the base `pdf.js` reads
+  the customer page rules from the new `custom.js`; upload both together, otherwise page
+  references miss the customer's `@page` rules. Check every customer and shared customer
+  layer for workarounds the update makes obsolete (e.g. 1.0.59 removes the top margin after
+  forced page and column breaks itself).
