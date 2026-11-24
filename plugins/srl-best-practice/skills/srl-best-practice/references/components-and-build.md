@@ -24,7 +24,9 @@ livingdocs/
 - Component name = folder name without prefix = `ld-conf.json` `name`. A folder
   only counts as a component if it has an `*.html` and an `ld-conf.json`.
 - Order in the editor and in the aggregated SCSS follows the folder names
-  (alphabetical, so keep the numeric prefixes zero-padded). `999.Properties` is
+  (alphabetical, so keep the numeric prefixes zero-padded). From 1.0.59 the sort
+  compares code units, not the locale: upper case sorts before lower case
+  (`B` before `a`). `999.Properties` is
   always imported after all components.
 - Renumbering folders is safe: only order changes, names stay the same.
 - Scaffold with `npx srl create component <Group>/<NNN.name>` (non-interactive
@@ -186,7 +188,11 @@ web and editor go into `web.scss`. Editor-only helpers (labels, borders, the
   sets `name`/`version` from package.json and copies it to `design.json`.
 - `srl prepare` (postinstall) deletes and recreates `.srl/` and copies the
   library's `srl/` files; the Vite plugin reruns it when the package version
-  changes. Restart dev after updating the package.
+  changes. Restart dev after updating the package. The first `srl build` after an
+  update also notices the new version ("Srl version changed, Trigger srl prepare")
+  and recreates `.srl/` in the middle of the run; the font build of that run fails
+  with `Could not resolve entry module ".srl/imports/fonts/style.scss"` and the
+  build still exits with 0. Run the build a second time before checking results.
 - `srl build` exits with 0 even when a Vite build or the validator throws. Check
   the log.
 - A validator error stops everything after the LDD step: customer builds, XBRL
@@ -194,13 +200,15 @@ web and editor go into `web.scss`. Editor-only helpers (labels, borders, the
   `.output/design.zip` failed.
 - `-c <customer>|all` only runs together with the `pdf` target. It copies the
   whole `.output/pdf`, `.output/word` and `.output/xbrl` into `.output/ldd/`;
-  when `ldd` is built in the same run they end up in `design.zip`. The XBRL copy
-  is taken **before** the `@media` blocks are stripped, so that `xbrl.css` still
-  contains them.
+  when `ldd` is built in the same run they end up in `design.zip`. Up to 1.0.57
+  the XBRL copy was taken **before** the `@media` blocks were stripped, so that
+  `xbrl.css` (and the customer `xbrl.css`) still contained them. From 1.0.59 the
+  base XBRL is finished first and the customer `xbrl.css` is stripped as well.
 - `-c all` treats every entry of `pdf/customers/` as a customer, also plain
   files like `.gitkeep`; keep only customer folders there. `custom.ts` is the PDF
   entry of a customer, `custom.scss` is only built for XBRL (together with the
-  base `xbrl.scss`).
+  base `xbrl.scss`). From 1.0.59 every customer gets a `custom.js`, also a CSS-only
+  one (see the PDF reference, "Page rules and page-reference colors").
 - Font SCSS in `src/assets/fonts/**` is compiled into app and xbrl. ldd, pdf and
   word instead `@import "<INTERNAL_LDD_URL>/<package name>/<version>/fonts/style.css"`,
   so their fonts load from the deployed design version. `INTERNAL_LDD_URL`

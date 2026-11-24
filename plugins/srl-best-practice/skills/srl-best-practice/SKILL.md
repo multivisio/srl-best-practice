@@ -21,7 +21,7 @@ description: >
 This skill covers SRL 1 (`@simple-reporting/base`). To move a project to SRL 2
 (`@simple-reporting/core`, Nuxt), use the `srl-migrate-srl2` skill.
 
-Based on an analysis of `@simple-reporting/base` 1.0.53, re-checked against 1.0.55. When in doubt, read the
+Based on an analysis of `@simple-reporting/base` 1.0.53, re-checked against 1.0.55 and 1.0.59. When in doubt, read the
 package source in `node_modules/@simple-reporting/base` (scripts/, scss/, srl/),
 it is small and readable. The details are in the reference files:
 
@@ -65,7 +65,10 @@ it is small and readable. The details are in the reference files:
    `ld-conf.json`, `properties.json`); for CSS and token changes keep the current one.
 8. **An LDD build may only reorder `livingdocs.config.json`.** Compare it
    semantically (parsed JSON) with the committed version and revert pure reorders
-   instead of committing noise.
+   instead of committing noise. From 1.0.59 the mapper sorts files and folders itself
+   (by code units, so the order is the same on every machine and OS). The first build
+   after updating to 1.0.59 reorders the file once; commit that reorder together with
+   the package update, afterwards the order stays stable.
 9. **Nothing but folders directly in `livingdocs/`.** The group mapper deletes
    plain files at that level.
 10. **Remove unused things only after checking every access path** (see

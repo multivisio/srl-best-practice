@@ -31,12 +31,59 @@
   - `PDFNotes({ noteClass })` groups notes and marks first/last.
   - `PDFSetPageNumbers({ tocItemClass, tocItemPageNumberClass })` fills the table
     of contents with page numbers.
+  - From 1.0.59: `PDFImageFloats(afterLift)` (image page floats, see below) and
+    `PDFPageReferenceColors(pdfPageRules)` (color schemes of PDF page references).
+    The library entry runs both in `load`, image floats first, with
+    `new PDFNestedContainers(...)` as `afterLift` callback so the first/last markers
+    are set again after images were lifted. `PDFNotes` is only created when the
+    page has notes (`document.querySelector(noteClass)`).
 - Customer builds: `pdf/customers/<name>-<suffix>/` with optional `custom.ts`,
   `custom.scss` and `public/`. `srl build -t pdf --customer <folder|all>` copies
   pdf/word/xbrl output into `.output/ldd/…` and writes `pdf-configuration.xml` and
   `pdf-configuration-debug.xml` pointing to
   `$INTERNAL_LDD_URL/<design>/<version>/pdf/…`. The customer name is the folder
   name up to the first `-`.
+
+## Page rules and page-reference colors (1.0.59)
+
+- The entry imports the stylesheet twice:
+  `import '#imports/pdf.scss'` and `import pdfPageRules from '#imports/pdf.scss?srl-page-rules'`.
+  The Vite plugin turns the second import into a string with only the compiled `@page`
+  blocks; the full CSS stays in `pdf.css`, nothing is duplicated in `pdf.js`.
+- Customer builds extract the `@page` rules of the customer `custom.css` and of the CSS
+  files from the customer's `public/` folder, in stylesheet order, and prepend them to the
+  customer `custom.js` (`window.__srlPDFOverlayPageRules = "…"`). So every customer now
+  has a `custom.js`, also CSS-only ones, and `pdf-configuration.xml` always lists it
+  right after `pdf.js`. No customer import is needed.
+- Deploy the new base `pdf.js` together with the rebuilt `custom.js` of every customer.
+  An old `custom.js` does not break the PDF (the helper skips missing overlay rules),
+  but page references then do not know the customer's `@page` rules.
+
+## Image floats, columns and other PDF options (1.0.59)
+
+- Image property `image-position-in-pdf`: Default (normal flow), Top/Bottom (page float
+  touching the trim edge, caption below a top / above a bottom image) and four corners
+  (image to the horizontal trim edge, caption beside it toward the page center).
+- `image-column-span-in-pdf`: width of such a float, independent of the position
+  (Default, one, two or all text columns, measured from the real column container and
+  its gap). The Default position ignores it.
+- Customer variables: `--srl-pdf-image-caption-columns` (corner caption width in grid
+  columns, default 2), `--srl-pdf-image-caption-width` (explicit length),
+  `--srl-pdf-image-caption-gap`, `--srl-pdf-image-flow-gap` (space between the figure
+  and the body text, default the `visual-media` margin group, fallback spacer 800).
+- PDF column container: `pdf-column-count` with two (default) or three columns
+  (`srl-pdf-columns-3`), only for its own content; balanced/unbalanced stays separate.
+- PDF TOC page: optional `background` image (A4 crop), repeated on every page of a split
+  TOC including the margins.
+- PDF page/element references: optional `fallback-image` for web, Word, XHTML/XBRL and
+  translate-plus; the PDF include is removed there, the image is removed from the PDF.
+- `invert-cover` moved to the shared properties (`999.Properties`), same identifier.
+- `core-styles` now sets `margin-top: 0 !important` on the first element after
+  `.srl-pdf-pagebreak` and `.srl-pdf-columnbreak` (PDFreactor keeps a top margin after a
+  forced break). Remove project or customer workarounds for this; spacing layers that set
+  their own top margins lose them after a forced break.
+- These components live in the package's `livingdocs/` folder; a project that copied
+  them earlier gets the changes only with `srl add` or by hand.
 
 ## Script timing in PDFreactor
 
@@ -48,8 +95,10 @@
   scripts happens). Inline, a static `<script src>` in the head and a user script
   with `beforeDocumentScripts` work. Start the entry with a check of
   `document.readyState`: `'loading'` → wait for `DOMContentLoaded`, otherwise run
-  now. Use no second event (`load`) for the layout scripts, it is not needed and
-  can be missed the same way.
+  now. Use no second event (`load`) for your own layout scripts, it is not needed
+  and can be missed the same way. The library entry from 1.0.59 does run
+  `PDFImageFloats` and `PDFPageReferenceColors` in `load`; that works because ns.wow
+  and the configuration load `pdf.js` inline or with `beforeDocumentScripts`.
   `setTimeout` and Promises run too late and are effectively ignored.
 - `ro.layout.getBoxDescriptions(el)` lays the document out on demand, so layout
   scripts do not need to wait for `load`: an A/B test (wait for `load` vs. run
