@@ -1,5 +1,45 @@
 # srl-best-practice
 
+> [!IMPORTANT]
+> **This repo has moved to [mmssolutionsio/srl-skillbox](https://github.com/mmssolutionsio/srl-skillbox).**
+> It is no longer maintained here; all changes to the plugin go to the new repo only.
+> The plugin and skill names stay the same, only the marketplace is now called `srl-skillbox`.
+
+## Switching to the new repo
+
+You need read access to `mmssolutionsio/srl-skillbox` (private repo) and a working GitHub
+login for git, e.g. `gh auth login`. Then, in a terminal:
+
+```
+claude plugin uninstall srl-best-practice@srl-best-practice
+claude plugin marketplace remove srl-best-practice
+claude plugin marketplace add mmssolutionsio/srl-skillbox
+claude plugin install srl-best-practice@srl-skillbox
+```
+
+Inside Claude Code the same works with `/plugin marketplace remove srl-best-practice`,
+`/plugin marketplace add mmssolutionsio/srl-skillbox` and
+`/plugin install srl-best-practice@srl-skillbox`. Restart Claude Code afterwards.
+
+Check with `claude plugin list`: `srl-best-practice@srl-skillbox` should be listed, and no
+entry `@srl-best-practice` any more. Future updates:
+
+```
+claude plugin marketplace update srl-skillbox
+claude plugin update srl-best-practice@srl-skillbox
+```
+
+If you have a local clone of this repo, point it at the new one (the history is the same):
+
+```
+git remote set-url origin https://github.com/mmssolutionsio/srl-skillbox.git
+git pull
+```
+
+---
+
+*The content below is the last state in this repo and is kept for reference only.*
+
 A Claude Code plugin with best practices for projects built on the
 [Simple Reporting Library](https://github.com/mmssolutionsio/simple-reporting-library)
 (`@simple-reporting/base`, CLI `srl`).
