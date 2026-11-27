@@ -22,7 +22,13 @@ Inside Claude Code the same works with `/plugin marketplace remove srl-best-prac
 `/plugin install srl-best-practice@srl-skillbox`. Restart Claude Code afterwards.
 
 Check with `claude plugin list`: `srl-best-practice@srl-skillbox` should be listed, and no
-entry `@srl-best-practice` any more. Future updates:
+entry `@srl-best-practice` any more.
+
+Then turn on auto-update, so you never have to update by hand: in Claude Code `/plugin` →
+Marketplaces → `srl-skillbox` → Enable auto-update. New versions are then installed at the
+next start of Claude Code. Details in the
+[srl-skillbox README](https://github.com/mmssolutionsio/srl-skillbox#updates). To update right
+away by hand:
 
 ```
 claude plugin marketplace update srl-skillbox
